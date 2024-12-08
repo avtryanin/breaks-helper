@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+	<head>
+	  <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <link rel="stylesheet" href="styles/popup.css" type="text/css">
+	  <title>Popup</title>
+	</head>
+
+	<body class="body">
+
+		<div class="top">
+			<h3>Breaks' Helper</h3>
+		</div>
+
+		<div class="switch-panel">
+			<label class="switch">
+				<input type="checkbox" id="toggle">
+				<span class="slider"></span>
+			</label>
+		</div>
+
+		<div class="exclude">
+			<div class="input-panel">
+				<form>
+					<label>
+						<input type="text" id="username-input" 
+							placeholder="Исключить по логину">
+					</label>
+					<button id="add-button">+</button>
+				</form>
+			</div>
+
+			<div class="excluded-list">
+				<ul id="list"></ul>
+			</div>
+
+		</div>
+
+		<script src="/js/popup.js"></script>
+	</body>
+
+</html>

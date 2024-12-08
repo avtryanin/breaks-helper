@@ -1,0 +1,77 @@
+.body {
+	margin: 0;
+	padding: 0;
+}
+.container {
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	font-family: Arial;
+	background-color: rgba(178, 214, 255, 0.1);
+}
+.top {
+	margin-top: -200px;
+	flex-basis: 100%;
+	text-align: center;
+}
+.content {
+	margin-top: -450px;
+	padding: 30px;
+	border-radius: 30px;
+	border: 1px solid rgb(178,214,255);
+	background-color: #fff;
+}
+.content h1 {
+	font-size: 50px;
+	text-align: center;
+	color: orange;/*изменить*/
+}
+.content h3 {
+	font-size: 25px;
+}
+.list {
+	font-weight: bold;
+	line-height: 25px;
+}
+.warning {
+	color: #fff;
+	font-weight: bold;
+	text-align: center;
+	line-height: 20px;
+	position: relative;
+	border-radius: 10px;
+	margin: 30px;
+	padding: 1px 10px;
+	background-color: rgb(255,76,0);
+}
+.button-panel {
+	padding: 20px;
+	text-align: center;
+}
+.ok-button {
+	width: 80px;
+	height: 40px;
+	padding: 0 10px;
+	border-radius: 10px;
+	border-style: solid;
+	border-color: rgb(178,214,255);
+	font-size: 15px;
+	color: #000;
+	background-color: #fff;
+	position: relative;
+	cursor: pointer;
+	z-index: 1;
+}
+.ok-button:hover {
+	color: rgb(242,242,242);
+	font-weight: bold;
+	background-color: rgb(79,255,134);
+}
+.ok-button:active {
+	color: rgb(242,242,242);
+	font-weight: normal;
+	background-color: rgb(79,255,134) !important;
+}
