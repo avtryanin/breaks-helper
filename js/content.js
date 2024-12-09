@@ -95,7 +95,8 @@ chrome.storage.local.get(['isEnabled', 'timerValue'], (data) => {
 		getUsername();
 		createComponents();
 	}
-})
+});
+
 
 //слушатель тумблера
 chrome.storage.onChanged.addListener((changes, area) => {
@@ -231,18 +232,21 @@ function checkExcluded(operator) {
 }
 
 //обновление статуса и таймера
-function updateStateTimer(state) {
-	timer.reset(state);
-	timer.start();
-	saveTimerValue(); // Сохраняем значение таймера при изменении состояния
+function updateStateTimer(newState) {
+	if (state !== newState) { // Сброс только при изменении состояния
+		timer.reset(newState);
+		saveTimerValue(); // Сохраняем значение таймера при изменении состояния
+	}
+	state = newState; // Обновляем текущее состояние
+
 	if (state === `ON SHIFT`) {
-		stateTimer.style.color = `rgb(79,255,134)`
+		stateTimer.style.color = `rgb(79,255,134)`;
 	} else if (state === `ON BREAK`) {
 		stateTimer.style.color = `orange`; // изменить цвет
 	} else if (state === `BUSY`) {
-		stateTimer.style.color = `rgb(255,76,0)`
+		stateTimer.style.color = `rgb(255,76,0)`;
 	} else {
-		stateTimer.style.color = `white`
+		stateTimer.style.color = `white`;
 	}
 }
 
@@ -274,10 +278,10 @@ class Timer {
 
 	//сброс
 	reset(state) {
-		this.stop();
-		this.seconds = 0;
-		this.state = state;
-		this.displayTime();
+		this.stop(); // Останавливаем таймер
+		this.seconds = 0; // Сбрасываем секунды
+		this.state = state; // Устанавливаем новое состояние
+		this.displayTime(); // Обновляем отображение
 	}
 
 	//отображение
