@@ -117,34 +117,48 @@ chrome.storage.onChanged.addListener((changes, area) => {
 
 //получение логина польз.
 function getUsername() {
-	try {
-		const username = document.getElementsByClassName(
-			'user-avatar_user__2Ul_N user-menu_avatar__1uxes'
-			)[0].firstChild.alt
+	chrome.storage.sync.get(['username'], (result) => {
+		if (chrome.runtime.lastError) {
+			console.error('Error retrieving username from storage:', chrome.runtime.lastError);
+			return;
+		}
 
-		//сохранение в хранилище
-		chrome.storage.sync.set({ username: username }, function() {
-			if (chrome.runtime.lastError) {
-				throw new Error(chrome.runtime.lastError);
-			}
-			console.log('Username saved successfully!');
-			user = username
-		});
-	} catch (error) {
-		console.error('Error occurred while getting or saving username:', error);
-	}
+		if (result.username) {
+			user = result.username;
+			console.log('Username loaded from storage:', user);
+			return;
+		}
+
+		try {
+			const username = document.getElementsByClassName(
+				'user-avatar_user__2Ul_N user-menu_avatar__1uxes'
+			)[0].firstChild.alt;
+
+			//сохранение в хранилище
+			chrome.storage.sync.set({ username: username }, function() {
+				if (chrome.runtime.lastError) {
+					throw new Error(chrome.runtime.lastError);
+				}
+				console.log('Username saved successfully!');
+				user = username;
+			});
+		} catch (error) {
+			console.error('Error occurred while getting or saving username:', error);
+		}
+	});
 }
 
 //обновление значений
 async function updateValues() {
+	//получение значений
 	try {
-		//получение значений
 		//получение username, если не удалось загрузить ранее
 		if (user === '') {
-			getUsername()
+			getUsername(); // Теперь у нас есть проверка, чтобы не вызывать getUsername повторно
 		}
+
 		const operators = document.getElementsByClassName("operator_name__1XCUC");
-    	const states = document.getElementsByClassName("operator_statusText__2-wrK operator_clickable__wtvNe");
+		const states = document.getElementsByClassName("operator_statusText__2-wrK operator_clickable__wtvNe");
 
 		let sum = 0;
 		let breaks = 0;
@@ -163,11 +177,11 @@ async function updateValues() {
 					breaks++;
 				}
 			}
-			//определение статуса польз.
+			//определение статуса пользователя
 			if (operator === user) {
 				if (state !== states[i].innerText) {
-					state = states[i].innerText
-					updateStateTimer(state)
+					state = states[i].innerText;
+					updateStateTimer(state);
 				}
 			}
 		}
@@ -286,4 +300,3 @@ function saveTimerValue() {
 		}
 	});
 }
-
