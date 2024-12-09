@@ -84,11 +84,14 @@ let user = '';
 let state = '';
 
 //инициализация состояния при загрузке
-chrome.storage.local.get(['isEnabled', 'timerValue'], (data) => {
+chrome.storage.local.get(['isEnabled', 'timerValue', 'state'], (data) => {
 	if (data.isEnabled) {
 		if (data.timerValue) {
 			timer.seconds = data.timerValue; // Загружаем значение таймера
 			timer.displayTime(); // Отображаем загруженное значение
+		}
+		if (data.state) {
+			state = data.state; // Загружаем состояние
 		}
 		updateInterval = setInterval(updateValues, 1000);
 		timer.start();
@@ -232,20 +235,32 @@ function checkExcluded(operator) {
 }
 
 //обновление статуса и таймера
-function updateStateTimer(state) {
-	timer.reset(state);
-	timer.start();
-	saveTimerValue();
-
-	if (state === `ON SHIFT`) {
-		stateTimer.style.color = `rgb(79,255,134)`;
-	} else if (state === `ON BREAK`) {
-		stateTimer.style.color = `orange`; // изменить цвет
-	} else if (state === `BUSY`) {
-		stateTimer.style.color = `rgb(255,76,0)`;
-	} else {
-		stateTimer.style.color = `white`;
+function updateStateTimer(newState) {
+	if (state !== newState) {
+		timer.reset(newState);
+		saveTimerValue();
+		saveStateValue(newState);
 	}
+	state = newState;
+
+	if (state === 'ON SHIFT') {
+		stateTimer.style.color = 'rgb(79,255,134)';
+	} else if (state === `ON BREAK`) {
+		stateTimer.style.color = 'rgb(189,102,0)';
+	} else if (state === `BUSY`) {
+		stateTimer.style.color = 'rgb(255,76,0)';
+	} else {
+		stateTimer.style.color = 'white';
+	}
+}
+
+//сохранение состояния
+function saveStateValue(state) {
+	chrome.storage.local.set({ state: state }, () => {
+		if (chrome.runtime.lastError) {
+			console.error('Error saving state value:', chrome.runtime.lastError);
+		}
+	});
 }
 
 
