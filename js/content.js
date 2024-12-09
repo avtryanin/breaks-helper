@@ -87,11 +87,11 @@ let state = '';
 chrome.storage.local.get(['isEnabled', 'timerValue', 'state'], (data) => {
 	if (data.isEnabled) {
 		if (data.timerValue) {
-			timer.seconds = data.timerValue; // Загружаем значение таймера
-			timer.displayTime(); // Отображаем загруженное значение
+			timer.seconds = data.timerValue;
+			timer.displayTime();
 		}
 		if (data.state) {
-			state = data.state; // Загружаем состояние
+			state = data.state;
 		}
 		updateInterval = setInterval(updateValues, 1000);
 		timer.start();
@@ -237,8 +237,7 @@ function checkExcluded(operator) {
 //обновление статуса и таймера
 function updateStateTimer(state) {
 	timer.reset(state);
-	saveTimerValue();
-	saveStateValue(newState);
+	saveStateValue(state);
 
 	if (state === 'ON SHIFT') {
 		stateTimer.style.color = 'rgb(79,255,134)';
