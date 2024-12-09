@@ -84,14 +84,18 @@ let user = '';
 let state = '';
 
 //инициализация состояния при загрузке
-chrome.storage.local.get(`isEnabled`, (data) => {
+chrome.storage.local.get(['isEnabled', 'timerValue'], (data) => {
 	if (data.isEnabled) {
+		if (data.timerValue) {
+			timer.seconds = data.timerValue; // Загружаем значение таймера
+			timer.displayTime(); // Отображаем загруженное значение
+		}
 		updateInterval = setInterval(updateValues, 1000);
 		timer.start();
 		getUsername();
 		createComponents();
 	}
-});
+})
 
 //слушатель тумблера
 chrome.storage.onChanged.addListener((changes, area) => {
@@ -216,54 +220,54 @@ function checkExcluded(operator) {
 function updateStateTimer(state) {
 	timer.reset(state);
 	timer.start();
+	saveTimerValue(); // Сохраняем значение таймера при изменении состояния
 	if (state === `ON SHIFT`) {
 		stateTimer.style.color = `rgb(79,255,134)`
-	}
-	else if (state === `ON BREAK`) {
-		stateTimer.style.color = `orange`//изменить цвет
-	}
-	else if (state === `BUSY`) {
+	} else if (state === `ON BREAK`) {
+		stateTimer.style.color = `orange`; // изменить цвет
+	} else if (state === `BUSY`) {
 		stateTimer.style.color = `rgb(255,76,0)`
 	} else {
 		stateTimer.style.color = `white`
-	};
+	}
 }
 
 
 //таймер
 class Timer {
-    constructor() {
-        this.seconds = 0;
-        this.intervalId = null;
+	constructor() {
+		this.seconds = 0;
+		this.intervalId = null;
 		this.state = '';
-    }
+	}
 
-    //запуск
-    start() {
-        if (this.intervalId) return;
+	//запуск
+	start() {
+		if (this.intervalId) return;
 
-        this.intervalId = setInterval(() => {
-            this.seconds++;
-            this.displayTime();
-        }, 1000);
-    }
+		this.intervalId = setInterval(() => {
+			this.seconds++;
+			this.displayTime();
+			saveTimerValue();
+		}, 1000);
+	}
 
-    //остановка
-    stop() {
-        clearInterval(this.intervalId);
-        this.intervalId = null;
-    }
+	//остановка
+	stop() {
+		clearInterval(this.intervalId);
+		this.intervalId = null;
+	}
 
-    //сброс
-    reset(state) {
-        this.stop();
-        this.seconds = 0;
+	//сброс
+	reset(state) {
+		this.stop();
+		this.seconds = 0;
 		this.state = state;
-        this.displayTime();
-    }
+		this.displayTime();
+	}
 
-    //отображение
-    displayTime() {
+	//отображение
+	displayTime() {
 		const hours = String(Math.floor(this.seconds / 3600)).padStart(2, '0');
 		const minutes = String(Math.floor((this.seconds % 3600) / 60)).padStart(2, '0');
 		const seconds = String(this.seconds % 60).padStart(2, '0');
@@ -273,3 +277,13 @@ class Timer {
 }
 
 const timer = new Timer();
+
+//сохранение значения таймера
+function saveTimerValue() {
+	chrome.storage.local.set({ timerValue: timer.seconds }, () => {
+		if (chrome.runtime.lastError) {
+			console.error('Error saving timer value:', chrome.runtime.lastError);
+		}
+	});
+}
+
