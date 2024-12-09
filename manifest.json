@@ -33,7 +33,7 @@
   	"notifications"
   ],
   "host_permissions": [
-  	"https://remote.sdc.yandex-team.ru/operators",
+  	"https://remote.sdc.yandex-team.ru/operators"
   ],
   "background": {
   	"service_worker": "js/background.js"
