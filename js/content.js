@@ -79,6 +79,7 @@ function removeComponents() {
 // > Инициализация
 
 
+let url;
 let updateInterval;
 let user = '';
 let state = '';
@@ -95,6 +96,7 @@ chrome.storage.local.get(['isEnabled', 'timerValue', 'state', 'stateColor'], (da
 			stateTimer.textContent = state;
 			stateTimer.style.color = data.stateColor || 'white';
 		}
+		url = window.location.href;
 		updateInterval = setInterval(updateValues, 1000);
 		timer.start();
 		getUsername();
@@ -156,6 +158,12 @@ function getUsername() {
 
 //обновление значений
 async function updateValues() {
+	//проверка изменения url
+	url = window.location.href;
+	if (url !== 'https://remote.sdc.yandex-team.ru/operators') {
+		clearInterval(updateInterval);
+		removeComponents();
+	}
 	//получение значений
 	try {
 		//получение username, если не удалось загрузить ранее
