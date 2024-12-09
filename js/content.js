@@ -236,7 +236,6 @@ function updateStateTimer(state) {
 	timer.reset(state);
 	timer.start();
 	saveTimerValue();
-	}
 
 	if (state === `ON SHIFT`) {
 		stateTimer.style.color = `rgb(79,255,134)`;
