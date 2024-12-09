@@ -20,8 +20,7 @@
   			"js/content.js"
   		],
   		"matches": [
-  			"https://remote.sdc.yandex-team.ru/operators",
-			"https://ya.ru/?npr=1&utm_referrer=https%3A%2F%2Fwww.yandex.ru%2Fclck%2Fjsredir%3Ffrom%3Dyandex.ru%3Bsuggest%3Bbrowser%26text%3D"
+  			"https://remote.sdc.yandex-team.ru/operators"
   		]
   	}
   ],
@@ -35,7 +34,6 @@
   ],
   "host_permissions": [
   	"https://remote.sdc.yandex-team.ru/operators",
-	"https://ya.ru/?npr=1&utm_referrer=https%3A%2F%2Fwww.yandex.ru%2Fclck%2Fjsredir%3Ffrom%3Dyandex.ru%3Bsuggest%3Bbrowser%26text%3D"
   ],
   "background": {
   	"service_worker": "js/background.js"
