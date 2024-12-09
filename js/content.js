@@ -158,7 +158,7 @@ async function updateValues() {
 	try {
 		//получение username, если не удалось загрузить ранее
 		if (user === '') {
-			getUsername(); // Теперь у нас есть проверка, чтобы не вызывать getUsername повторно
+			getUsername();
 		}
 
 		const operators = document.getElementsByClassName("operator_name__1XCUC");
@@ -287,10 +287,10 @@ class Timer {
 
 	//сброс
 	reset(state) {
-		this.stop(); // Останавливаем таймер
-		this.seconds = 0; // Сбрасываем секунды
-		this.state = state; // Устанавливаем новое состояние
-		this.displayTime(); // Обновляем отображение
+		this.stop();
+		this.seconds = 0;
+		this.state = state;
+		this.displayTime();
 	}
 
 	//отображение
