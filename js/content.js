@@ -237,6 +237,7 @@ function checkExcluded(operator) {
 //обновление статуса и таймера
 function updateStateTimer(state) {
 	timer.reset(state);
+	timer.start()
 	saveStateValue(state);
 
 	if (state === 'ON SHIFT') {
