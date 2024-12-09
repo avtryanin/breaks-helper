@@ -235,13 +235,10 @@ function checkExcluded(operator) {
 }
 
 //обновление статуса и таймера
-function updateStateTimer(newState) {
-	if (state !== newState) {
-		timer.reset(newState);
-		saveTimerValue();
-		saveStateValue(newState);
-	}
-	state = newState;
+function updateStateTimer(state) {
+	timer.reset(state);
+	saveTimerValue();
+	saveStateValue(newState);
 
 	if (state === 'ON SHIFT') {
 		stateTimer.style.color = 'rgb(79,255,134)';
