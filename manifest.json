@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "Breaks Helper",
+  "description": "Это расширение упрощает контроль % `брейков` среди ♛ r3s0lv3rs ♂, но не учитывает очередь из ☑ r3Qw3st$ ☮ !!",
+  "version": "6.9",
+  "author": "avtryanin",
+  "action": {
+    "default_popup": "html/popup.html",
+    "default_icon": "images/icon-32.png"
+  },
+  "icons": {
+  	"16": "images/icon-16.png",
+  	"32": "images/icon-32.png",
+  	"48": "images/icon-48.png",
+  	"128": "images/icon-128.png"
+  },
+  "content_scripts": [
+  	{
+  		"js": [
+  			"js/content.js"
+  		],
+  		"matches": [
+  			"https://remote.sdc.yandex-team.ru/operators",
+			"https://ya.ru/?npr=1&utm_referrer=https%3A%2F%2Fwww.yandex.ru%2Fclck%2Fjsredir%3Ffrom%3Dyandex.ru%3Bsuggest%3Bbrowser%26text%3D"
+  		]
+  	}
+  ],
+  "permissions": [
+  	"tabs",
+  	"activeTab",
+  	"scripting",
+  	"storage",
+  	"alarms",
+  	"notifications"
+  ],
+  "host_permissions": [
+  	"https://remote.sdc.yandex-team.ru/operators",
+	"https://ya.ru/?npr=1&utm_referrer=https%3A%2F%2Fwww.yandex.ru%2Fclck%2Fjsredir%3Ffrom%3Dyandex.ru%3Bsuggest%3Bbrowser%26text%3D"
+  ],
+  "background": {
+  	"service_worker": "js/background.js"
+  }
+}
