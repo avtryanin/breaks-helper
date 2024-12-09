@@ -93,7 +93,7 @@ chrome.storage.local.get(['isEnabled', 'timerValue', 'state', 'stateColor'], (da
 		}
 		if (data.state) {
 			state = data.state;
-			stateTimer.textContent = state;
+			timer.state = state;
 			stateTimer.style.color = data.stateColor || 'white';
 		}
 		url = window.location.href;
