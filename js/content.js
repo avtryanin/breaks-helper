@@ -212,7 +212,7 @@ function getPercent(sum, breaks) {
 	let result;
 	if (sum !== 0) {
 		result = (100 / sum) * breaks;
-		if (result > 30) {
+		if (result >= 30) {
 			percent.style.backgroundColor = 'rgb(255,76,0)';
 		} else {
 			percent.style.backgroundColor = 'rgb(79,255,134)';
