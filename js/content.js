@@ -1,6 +1,12 @@
 // > Интерфейс
 
 
+//цвета
+const white = 'rgb(242,242,242)'
+const red = 'rgb(255,76,0)'
+const green = 'rgb(79,255,134)'
+const blue = 'rgb(178,214,255)'
+
 //стилизация компонентов
 function createStyledElement(tag, text, styles) {
 	const element = document.createElement(tag);
@@ -20,7 +26,7 @@ const dashboard = createStyledElement('div', '', {
 	flexWrap: 'wrap',
 	gap: '10px',
 	borderRadius: '10px',
-	backgroundColor: 'rgb(242,242,242)',
+	backgroundColor: white,
 	zIndex: '1000'
 });
 
@@ -29,7 +35,7 @@ const resolvers = createStyledElement('div', 'resolvers', {
 	padding: '10px',
 	borderRadius: '10px',
 	fontWeight: 'bold',
-	backgroundColor: 'rgb(178,214,255)',
+	backgroundColor: blue,
 	flex: '1',
 	display: 'flex',
 	justifyContent: 'center',
@@ -41,7 +47,7 @@ const percent = createStyledElement('div', 'percent', {
 	padding: '10px',
 	borderRadius: '10px',
 	fontWeight: 'bold',
-	backgroundColor: 'rgb(79,255,134)',
+	backgroundColor: green,
 	flex: '1',
 	display: 'flex',
 	justifyContent: 'center',
@@ -79,7 +85,6 @@ chrome.storage.local.get(['isEnabled'], (data) => {
 	updateInterval = setInterval(updateValues, 1000);
 	createComponents();
 });
-
 
 //слушатель тумблера
 chrome.storage.onChanged.addListener((changes, area) => {
@@ -144,9 +149,9 @@ function getPercent(sum, breaks) {
 	if (sum !== 0) {
 		result = (100 / sum) * breaks;
 		if (result >= 30) {
-			percent.style.backgroundColor = 'rgb(255,76,0)';
+			percent.style.backgroundColor = red;
 		} else {
-			percent.style.backgroundColor = 'rgb(79,255,134)';
+			percent.style.backgroundColor = green;
 		}
 	} else {
 		result = 0;
