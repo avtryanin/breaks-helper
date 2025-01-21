@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Breaks Helper",
-  "description": "Это расширение упрощает контроль % `брейков` среди ♛ r3s0lv3rs ♂, но не учитывает очередь из ☑ r3Qw3st$ ☮ !!",
+  "description": "Расширение отображает количество резолверов  их процент на брейке",
   "version": "6.9",
   "author": "avtryanin",
   "action": {
