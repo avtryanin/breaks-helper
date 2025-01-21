@@ -8,12 +8,14 @@ function createStyledElement(tag, text, styles) {
 	Object.assign(element.style, styles);
 	return element;
 }
+
 //основной компонент
 const dashboard = createStyledElement('div', '', {
 	padding: '10px',
 	bottom: '30px',
 	right: '30px',
 	position: 'fixed',
+	minWidth: '300px',
 	display: 'flex',
 	flexWrap: 'wrap',
 	gap: '10px',
@@ -46,16 +48,6 @@ const percent = createStyledElement('div', 'percent', {
 	alignItems: 'center'
 });
 
-//статус и время его посл. изменения
-const stateTimer = createStyledElement('div', 'state', {
-	padding: '10px',
-	fontWeight: 'bold',
-	flexBasis: '100%',
-	display: 'flex',
-	justifyContent: 'center',
-	alignItems: 'center'
-});
-
 
 // > Управление интерфейсом
 
@@ -65,7 +57,6 @@ function createComponents() {
 	document.body.appendChild(dashboard);
 	dashboard.appendChild(resolvers);
 	dashboard.appendChild(percent);
-	dashboard.appendChild(stateTimer);
 }
 
 //удаление компонентов
@@ -81,27 +72,12 @@ function removeComponents() {
 
 let url;
 let updateInterval;
-let user = '';
-let state = '';
 
 //инициализация состояния при загрузке
-chrome.storage.local.get(['isEnabled', 'timerValue', 'state', 'stateColor'], (data) => {
-	if (data.isEnabled) {
-		if (data.timerValue) {
-			timer.seconds = data.timerValue;
-			timer.displayTime();
-		}
-		if (data.state) {
-			state = data.state;
-			timer.state = state;
-			stateTimer.style.color = data.stateColor || 'white';
-		}
-		url = window.location.href;
-		updateInterval = setInterval(updateValues, 1000);
-		timer.start();
-		getUsername();
-		createComponents();
-	}
+chrome.storage.local.get(['isEnabled'], (data) => {
+	url = window.location.href;
+	updateInterval = setInterval(updateValues, 1000);
+	createComponents();
 });
 
 
@@ -123,39 +99,6 @@ chrome.storage.onChanged.addListener((changes, area) => {
 // > Получение и обработка данных
 
 
-//получение логина польз.
-function getUsername() {
-	chrome.storage.sync.get(['username'], (result) => {
-		if (chrome.runtime.lastError) {
-			console.error('Error retrieving username from storage:', chrome.runtime.lastError);
-			return;
-		}
-
-		if (result.username) {
-			user = result.username;
-			console.log('Username loaded from storage:', user);
-			return;
-		}
-
-		try {
-			const username = document.getElementsByClassName(
-				'user-avatar_user__2Ul_N user-menu_avatar__1uxes'
-			)[0].firstChild.alt;
-
-			//сохранение в хранилище
-			chrome.storage.sync.set({ username: username }, function() {
-				if (chrome.runtime.lastError) {
-					throw new Error(chrome.runtime.lastError);
-				}
-				console.log('Username saved successfully!');
-				user = username;
-			});
-		} catch (error) {
-			console.error('Error occurred while getting or saving username:', error);
-		}
-	});
-}
-
 //обновление значений
 async function updateValues() {
 	//проверка изменения url
@@ -166,11 +109,6 @@ async function updateValues() {
 	}
 	//получение значений
 	try {
-		//получение username, если не удалось загрузить ранее
-		if (user === '') {
-			getUsername();
-		}
-
 		const operators = document.getElementsByClassName("operator_name__1XCUC");
 		const states = document.getElementsByClassName("operator_statusText__2-wrK operator_clickable__wtvNe");
 
@@ -189,13 +127,6 @@ async function updateValues() {
 				//подсчет брейков
 				if (states[i].innerText === 'ON BREAK') {
 					breaks++;
-				}
-			}
-			//определение статуса пользователя
-			if (operator === user) {
-				if (state !== states[i].innerText) {
-					state = states[i].innerText;
-					updateStateTimer(state);
 				}
 			}
 		}
@@ -241,88 +172,5 @@ function checkExcluded(operator) {
 				resolve(false);
 			}
 		});
-	});
-}
-
-//обновление статуса и таймера
-function updateStateTimer(state) {
-	timer.reset(state);
-	timer.start();
-
-	let color;
-	if (state === 'ON SHIFT') {
-		color = 'rgb(79,255,134)';
-	} else if (state === `ON BREAK`) {
-		color = 'rgb(189,102,0)';
-	} else if (state === `BUSY`) {
-		color = 'rgb(255,76,0)';
-	} else {
-		color = 'white';
-	}
-	stateTimer.style.color = color;
-	saveStateValue(state, color);
-}
-
-//сохранение состояния
-function saveStateValue(state, color) {
-	chrome.storage.local.set({ state: state, stateColor: color }, () => {
-		if (chrome.runtime.lastError) {
-			console.error('Error saving state value:', chrome.runtime.lastError);
-		}
-	});
-}
-
-
-//таймер
-class Timer {
-	constructor() {
-		this.seconds = 0;
-		this.intervalId = null;
-		this.state = '';
-	}
-
-	//запуск
-	start() {
-		if (this.intervalId) return;
-
-		this.intervalId = setInterval(() => {
-			this.seconds++;
-			this.displayTime();
-			saveTimerValue();
-		}, 1000);
-	}
-
-	//остановка
-	stop() {
-		clearInterval(this.intervalId);
-		this.intervalId = null;
-	}
-
-	//сброс
-	reset(state) {
-		this.stop();
-		this.seconds = 0;
-		this.state = state;
-		this.displayTime();
-	}
-
-	//отображение
-	displayTime() {
-		const hours = String(Math.floor(this.seconds / 3600)).padStart(2, '0');
-		const minutes = String(Math.floor((this.seconds % 3600) / 60)).padStart(2, '0');
-		const seconds = String(this.seconds % 60).padStart(2, '0');
-	
-		stateTimer.textContent = `${this.state} ${hours}:${minutes}:${seconds}`;
-	}
-}
-
-const timer = new Timer();
-
-//сохранение значения таймера
-function saveTimerValue() {
-	chrome.storage.local.set({ timerValue: timer.seconds }, () => {
-		if (chrome.runtime.lastError) {
-			console.error('Error saving timer value:', chrome.runtime.lastError);
-		}
 	});
 }
