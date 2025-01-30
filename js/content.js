@@ -181,11 +181,9 @@ chrome.storage.onChanged.addListener((changes, area) => {
 		const isEnabled = changes.isEnabled.newValue;
 		if (isEnabled) {
 			updateInterval = setInterval(updateValues, 1000);
-			timer.start()
 			createComponents();
 		} else {
 			clearInterval(updateInterval);
-			timer.stop()
 			removeComponents();
 		}
 	}
