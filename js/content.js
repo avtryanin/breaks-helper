@@ -212,14 +212,14 @@ async function updateValues() {
 		//получение логина польз.
 		if (!login) {
 			login = document.getElementsByClassName(
-			"user-avatar_user__2Ul_N user-menu_avatar__1uxes"
+			"user-avatar_user__5BQNs user-menu_avatar__2Sm0X"
 			)[0].children[0].alt;
 		}
 		
 		//парсинг информации
-		const operators = document.getElementsByClassName("operator_name__1XCUC");
-		const states = document.getElementsByClassName("operator_statusText__2-wrK operator_clickable__wtvNe");
-		const data = document.getElementsByClassName("operator_locations__3I0W4");
+		const operators = document.getElementsByClassName("operator_name__3Lf8v");
+		const states = document.getElementsByClassName("operator_statusText__5NtPs operator_clickable__ZfFMV");
+		const data = document.getElementsByClassName("operator_locations__7blQz");
 
 		//счетчики
 		let sum = 0;
